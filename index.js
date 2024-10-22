@@ -1,8 +1,12 @@
-import Stripe from 'stripe';
+import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import Stripe from 'stripe';
+import chalk from 'chalk';
 import { sendEmail } from './utils.js';
+import { Router } from "express";
+import routes from './src/routes/index.js';
 
 dotenv.config()
 
@@ -14,6 +18,7 @@ const allowedOrigins = [
 
 
 const app = express();
+const router = Router();
 const stripe = new Stripe('sk_test_51Q5CQjBSRlxFwzyWpwO9MYCbfPKEmJKJ9tGmyoDeHaSzB2KCUxtasfJdV1Qb311utzXiuccUMGhd91NR52KSMaAy00i4V12Ovz');
 
 app.use(express.json());
@@ -31,15 +36,22 @@ app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-
 }));
 
 const sessions = {};
 
-// const SESSION_EXPIRATION_TIME = 1 * 60 * 1000; 
+const mongoURI = `mongodb+srv://fahadalam12405:W5LKAuHZx8KtEyWm@cluster0.mtooe.mongodb.net/`;
 
+mongoose
+    .connect(mongoURI)
+    .then(() =>
+        console.log(chalk.white.bgGreen("---- Connected to MongoDB ----"))
+    )
+    .catch((err) =>
+        console.log(chalk.white.bgRed("---- Error Connected MongoDB ----", err))
+    );
 
-
+// done
 app.post('/create-payment-session', async (req, res) => {
     const { title, description, amount, image, agentName, agentNum, agentEmail } = req.body;
     try {
@@ -93,7 +105,7 @@ app.post('/create-payment-session', async (req, res) => {
 
 
 
-
+// done
 app.get('/get-payment-details/:sessionId', async (req, res) => {
     const sessionId = req.params.sessionId;
     const session = sessions[sessionId];
@@ -154,7 +166,7 @@ app.post('/payment-success', (req, res) => {
 
 
 
-
+app.use("/api", routes);
 
 
 
