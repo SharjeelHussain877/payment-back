@@ -53,7 +53,7 @@ mongoose
 
 // done
 app.post('/create-payment-session', async (req, res) => {
-    const { title, description, amount, image, agentName, agentNum, agentEmail } = req.body;
+    const { title, description, amount, image, clientName, clientNum, clientEmail } = req.body;
     try {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
@@ -65,7 +65,7 @@ app.post('/create-payment-session', async (req, res) => {
         const sessionId = paymentIntent.id;
         const uniqueUrl = `http://localhost:5173/payment/${sessionId}`;
 
-        const isEmailSent = paymentIntent.id && await sendEmail({ customerEmail: agentEmail, customerName: agentName, message: description }) // here should be that email sent what wanna recieve an email from company.
+        const isEmailSent = paymentIntent.id && await sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description }) // here should be that email sent what wanna recieve an email from company.
 
 
         let response = {}
@@ -76,7 +76,7 @@ app.post('/create-payment-session', async (req, res) => {
 
         sessions[sessionId] = {
             status: 'pending',
-            productDetails: { title, description, amount, image, agentName, agentNum, agentEmail },
+            productDetails: { title, description, amount, image, clientName, clientNum, clientEmail },
             createdAt: Date.now(),
         };
 
@@ -85,7 +85,7 @@ app.post('/create-payment-session', async (req, res) => {
 
     } catch (error) {
         console.error('Error creating payment session:', error.message);
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ success: false, message: error.message });
     }
 });
 
@@ -110,9 +110,9 @@ app.get('/get-payment-details/:sessionId', async (req, res) => {
     const sessionId = req.params.sessionId;
     const session = sessions[sessionId];
 
-    console.log(session)
+
     if (!session) {
-        return res.status(404).json({ error: 'Session not found or expired' });
+        return res.status(404).json({ success: false, message: 'Session not found or expired' });
     }
 
     try {
@@ -124,7 +124,7 @@ app.get('/get-payment-details/:sessionId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error retrieving payment intent:', error.message);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ success: false, message: error.message });
     }
 });
 
@@ -147,13 +147,11 @@ app.post('/payment-success', (req, res) => {
 
     if (sessions[sessionId]) {
         sessions[sessionId].status = 'completed';
-        console.log(`Payment status for session ${sessionId}: ${sessions[sessionId].status}`);
-        console.log("sessions=>", sessions[sessionId])
 
         // delete sessions[sessionId];
         res.status(200).json({ success: true });
     } else {
-        return res.status(404).json({ error: 'Session not found or already completed' });
+        return res.status(404).json({ success: false, message: 'Session not found or already completed' });
     }
 });
 
