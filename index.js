@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
-import { sendEmail } from './utils.js';
+import { sendEmail } from './src/utils/RetriveEmail.js';
 import { stripe } from './src/constants/keys.js';
 import routes from './src/routes/index.js';
 

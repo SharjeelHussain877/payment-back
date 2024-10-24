@@ -1,4 +1,4 @@
-import { sendEmail } from '../../utils.js';
+import { sendEmail } from '../utils/RetriveEmail.js';
 import { stripe } from '../constants/keys.js';
 import PaymentSession from '../models/paymentSessions.js';
 
@@ -49,7 +49,7 @@ export default async function generatePayment(req, res) {
         response.emailSent = isEmailSent.success
         response.data = savedSession
 
-        res.status(200).json({ success: true,status: 200, data: response });
+        res.status(200).json({ success: true, status: 200, data: response });
 
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
