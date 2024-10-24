@@ -17,12 +17,19 @@ const emailConfig = {
     user: domainEmail,
     pass: password,
   },
+  tls: {
+    rejectUnauthorized: false,
+  }
 };
 
 
 async function sendEmail(prop = { customerEmail: 'john.smith@gmail.com', customerName: "John Smith", message: "Hello john 😊!" }) {
   const { customerEmail, customerName, message } = prop;
 
+  console.log(domainEmail)
+  console.log(password)
+  console.log(domainPort)
+  
   const template = emailTemplate({ name: customerName, email: customerEmail, message })
   const transporter = nodemailer.createTransport(emailConfig);
 
@@ -35,9 +42,10 @@ async function sendEmail(prop = { customerEmail: 'john.smith@gmail.com', custome
 
   try {
     const info = await transporter.sendMail(mailOptions);
-
+    console.log('Email sent successfully', info);
     return { data: info, success: true };
   } catch (error) {
+    console.error('Error sending email:', error);
     return { message: error.message || 'Unknown error', success: false };
   }
 }
