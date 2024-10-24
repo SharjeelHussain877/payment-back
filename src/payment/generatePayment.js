@@ -39,14 +39,16 @@ export default async function generatePayment(req, res) {
             clientDetails: { clientName, clientNum, clientEmail },
         });
 
-        const [savedSession, isEmailSent] = await Promise.all([
-            newSession.save(),
-            paymentIntent.id ? sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description }) : Promise.resolve(null)
-        ]);
+        const savedSession = await newSession.save()
+
+        // sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
+        sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
+        .catch(error => console.error('Email send error:', error.message));
+
 
         let response = {}
 
-        response.emailSent = isEmailSent.success
+        response.emailSent = true
         response.data = savedSession
 
         res.status(200).json({ success: true, status: 200, data: response });
