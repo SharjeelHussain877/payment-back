@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import Stripe from 'stripe';
 import chalk from 'chalk';
 import { sendEmail } from './utils.js';
-import { Router } from "express";
 import routes from './src/routes/index.js';
 
 dotenv.config()
@@ -16,11 +15,26 @@ const allowedOrigins = [
     'http://localhost:5173',
 ];
 
+// it allow to all origin what to get call.
+const corsOptions = {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Accept",
+        "Origin",
+    ],
+    credentials: false,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+};
 
 const app = express();
-const router = Router();
 const stripe = new Stripe('sk_test_51Q5CQjBSRlxFwzyWpwO9MYCbfPKEmJKJ9tGmyoDeHaSzB2KCUxtasfJdV1Qb311utzXiuccUMGhd91NR52KSMaAy00i4V12Ovz');
 
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // app.use(cors((req, callback) => {
@@ -31,12 +45,6 @@ app.use(express.json());
 //         callback(new Error('Not allowed by CORS')); // Reject the origin
 //     }
 // }));
-
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
 
 const sessions = {};
 
