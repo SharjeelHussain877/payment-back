@@ -12,7 +12,7 @@ const allowedOrigins = [
     'http://localhost:5173',
 ];
 
-// it allow to all origin what to get call.
+
 const corsOptions = {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
@@ -61,4 +61,4 @@ app.get("*", (req, res) => res.status(400).json({ success: false, message: "THIS
 
 
 // Start the server
-app.listen(port, () => console.log('Server running on port 5000'));
+app.listen(port, () => console.log('Server running on port ' + port));
