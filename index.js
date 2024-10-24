@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import Stripe from 'stripe';
 import chalk from 'chalk';
 import { sendEmail } from './utils.js';
+import { stripe } from './src/constants/keys.js';
 import routes from './src/routes/index.js';
 
 dotenv.config()
@@ -32,7 +32,6 @@ const corsOptions = {
 };
 
 const app = express();
-const stripe = new Stripe('sk_test_51Q5CQjBSRlxFwzyWpwO9MYCbfPKEmJKJ9tGmyoDeHaSzB2KCUxtasfJdV1Qb311utzXiuccUMGhd91NR52KSMaAy00i4V12Ovz');
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -175,7 +174,7 @@ app.post('/payment-success', (req, res) => {
 app.use("/api", routes);
 
 app.get("/", (req, res) => res.status(200).json({ success: true, message: "API IS RUNNING ON THIS PORT " + port }))
-app.get("*", (req, res) => res.status(400).json({ success: false, message: "THIS ROUTE IS INVALID PLEASE RETRY WITH CORRRECT ROUTE"}))
+app.get("*", (req, res) => res.status(400).json({ success: false, message: "THIS ROUTE IS INVALID PLEASE RETRY WITH CORRRECT ROUTE" }))
 
 
 // Start the server
