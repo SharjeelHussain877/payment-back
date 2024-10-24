@@ -26,10 +26,6 @@ const emailConfig = {
 async function sendEmail(prop = { customerEmail: 'john.smith@gmail.com', customerName: "John Smith", message: "Hello john 😊!" }) {
   const { customerEmail, customerName, message } = prop;
 
-  console.log(domainEmail)
-  console.log(password)
-  console.log(domainPort)
-  
   const template = emailTemplate({ name: customerName, email: customerEmail, message })
   const transporter = nodemailer.createTransport(emailConfig);
 
