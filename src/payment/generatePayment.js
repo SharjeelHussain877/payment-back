@@ -43,8 +43,6 @@ export default async function generatePayment(req, res) {
 
         // sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
         sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
-        .catch(error => console.error('Email send error:', error.message));
-
 
         let response = {}
 
