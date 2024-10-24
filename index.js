@@ -47,7 +47,7 @@ app.use(express.json());
 // }));
 
 const sessions = {};
-
+const port = 5000
 const mongoURI = `mongodb+srv://fahadalam12405:W5LKAuHZx8KtEyWm@cluster0.mtooe.mongodb.net/`;
 
 mongoose
@@ -174,8 +174,9 @@ app.post('/payment-success', (req, res) => {
 
 app.use("/api", routes);
 
-
+app.get("/", (req, res) => res.status(200).json({ success: true, message: "API IS RUNNING ON THIS PORT " + port }))
+app.get("*", (req, res) => res.status(400).json({ success: false, message: "THIS ROUTE IS INVALID PLEASE RETRY WITH CORRRECT ROUTE"}))
 
 
 // Start the server
-app.listen(5000, () => console.log('Server running on port 5000'));
+app.listen(port, () => console.log('Server running on port 5000'));
