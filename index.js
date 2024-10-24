@@ -12,7 +12,7 @@ const allowedOrigins = [
     'http://localhost:5173',
 ];
 
-
+// it allow to all origin what to get call.
 const corsOptions = {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
@@ -30,17 +30,17 @@ const corsOptions = {
 
 const app = express();
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use(cors((req, callback) => {
-    const origin = req.header('Origin');
-    if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true); // Allow the origin
-    } else {
-        callback(new Error('Not allowed by CORS')); // Reject the origin
-    }
-}));
+// app.use(cors((req, callback) => {
+//     const origin = req.header('Origin');
+//     if (allowedOrigins.indexOf(origin) !== -1) {
+//         callback(null, true); // Allow the origin
+//     } else {
+//         callback(new Error('Not allowed by CORS')); // Reject the origin
+//     }
+// }));
 
 
 const port = process.env.PORT || 3000
