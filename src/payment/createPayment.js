@@ -7,12 +7,12 @@ export default async function createPayment(req, res) {
     try {
 
         const paymentIntentDetails = await stripe.paymentIntents.retrieve(sessionId);
-        if (paymentIntentDetails.amount_received) {
-            return res.status(400).json({
-                success: false,
-                message: "Payment not recieved yet!"
-            })
-        }
+        // if (paymentIntentDetails.amount_received) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "Payment not recieved yet!"
+        //     })
+        // }
 
         const isPaymentDetailsExist = await paymentSessions.findOne({ sessionId })
 
