@@ -43,13 +43,19 @@ export default async function generatePayment(req, res) {
 
         // sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
         sendEmail({ customerEmail: clientEmail, customerName: clientName, message: description })
+            .then(() => {
+                console.log("Email sent successfully");
+            })
+            .catch((error) => {
+                console.error("Error sending email:", error.message);
+            });
 
         let response = {}
 
         response.emailSent = true
         response.data = savedSession
 
-        res.status(200).json({ success: true, status: 200, data: response });
+        return res.status(200).json({ success: true, status: 200, data: response });
 
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
